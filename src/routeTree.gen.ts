@@ -10,16 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AttendanceRouteImport } from './routes/attendance'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as FinanceRouteImport } from './routes/finance'
+import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MeetingsRouteImport } from './routes/meetings'
 import { Route as MembersRouteImport } from './routes/members'
 import { Route as MoreRouteImport } from './routes/more'
+import { Route as NoticesRouteImport } from './routes/notices'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as OtpRouteImport } from './routes/otp'
+import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as AdminPermissionsRouteImport } from './routes/admin.permissions'
+import { Route as AdminRolesRouteImport } from './routes/admin.roles'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AttendanceRoute = AttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -27,9 +46,29 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceRoute = FinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InventoryRoute = InventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeetingsRoute = MeetingsRouteImport.update({
+  id: '/meetings',
+  path: '/meetings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MembersRoute = MembersRouteImport.update({
@@ -42,9 +81,24 @@ const MoreRoute = MoreRouteImport.update({
   path: '/more',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NoticesRoute = NoticesRouteImport.update({
+  id: '/notices',
+  path: '/notices',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OtpRoute = OtpRouteImport.update({
   id: '/otp',
   path: '/otp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsRoute = PaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -52,60 +106,201 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/admin/audit',
+  path: '/admin/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPermissionsRoute = AdminPermissionsRouteImport.update({
+  id: '/admin/permissions',
+  path: '/admin/permissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRolesRoute = AdminRolesRouteImport.update({
+  id: '/admin/roles',
+  path: '/admin/roles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/attendance': typeof AttendanceRoute
   '/dashboard': typeof DashboardRoute
+  '/events': typeof EventsRoute
+  '/finance': typeof FinanceRoute
+  '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/meetings': typeof MeetingsRoute
   '/members': typeof MembersRoute
   '/more': typeof MoreRoute
+  '/notices': typeof NoticesRoute
+  '/notifications': typeof NotificationsRoute
   '/otp': typeof OtpRoute
+  '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
+  '/admin/roles': typeof AdminRolesRoute
+  '/admin/users': typeof AdminUsersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/attendance': typeof AttendanceRoute
   '/dashboard': typeof DashboardRoute
+  '/events': typeof EventsRoute
+  '/finance': typeof FinanceRoute
+  '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/meetings': typeof MeetingsRoute
   '/members': typeof MembersRoute
   '/more': typeof MoreRoute
+  '/notices': typeof NoticesRoute
+  '/notifications': typeof NotificationsRoute
   '/otp': typeof OtpRoute
+  '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
+  '/admin/roles': typeof AdminRolesRoute
+  '/admin/users': typeof AdminUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/attendance': typeof AttendanceRoute
   '/dashboard': typeof DashboardRoute
+  '/events': typeof EventsRoute
+  '/finance': typeof FinanceRoute
+  '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/meetings': typeof MeetingsRoute
   '/members': typeof MembersRoute
   '/more': typeof MoreRoute
+  '/notices': typeof NoticesRoute
+  '/notifications': typeof NotificationsRoute
   '/otp': typeof OtpRoute
+  '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
+  '/admin/audit': typeof AdminAuditRoute
+  '/admin/permissions': typeof AdminPermissionsRoute
+  '/admin/roles': typeof AdminRolesRoute
+  '/admin/users': typeof AdminUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/dashboard' | '/login' | '/members' | '/more' | '/otp' | '/profile'
+    | '/'
+    | '/attendance'
+    | '/dashboard'
+    | '/events'
+    | '/finance'
+    | '/inventory'
+    | '/login'
+    | '/meetings'
+    | '/members'
+    | '/more'
+    | '/notices'
+    | '/notifications'
+    | '/otp'
+    | '/payments'
+    | '/profile'
+    | '/reports'
+    | '/settings'
+    | '/admin/audit'
+    | '/admin/permissions'
+    | '/admin/roles'
+    | '/admin/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/members' | '/more' | '/otp' | '/profile'
+  to:
+    | '/'
+    | '/attendance'
+    | '/dashboard'
+    | '/events'
+    | '/finance'
+    | '/inventory'
+    | '/login'
+    | '/meetings'
+    | '/members'
+    | '/more'
+    | '/notices'
+    | '/notifications'
+    | '/otp'
+    | '/payments'
+    | '/profile'
+    | '/reports'
+    | '/settings'
+    | '/admin/audit'
+    | '/admin/permissions'
+    | '/admin/roles'
+    | '/admin/users'
   id:
     | '__root__'
     | '/'
+    | '/attendance'
     | '/dashboard'
+    | '/events'
+    | '/finance'
+    | '/inventory'
     | '/login'
+    | '/meetings'
     | '/members'
     | '/more'
+    | '/notices'
+    | '/notifications'
     | '/otp'
+    | '/payments'
     | '/profile'
+    | '/reports'
+    | '/settings'
+    | '/admin/audit'
+    | '/admin/permissions'
+    | '/admin/roles'
+    | '/admin/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AttendanceRoute: typeof AttendanceRoute
   DashboardRoute: typeof DashboardRoute
+  EventsRoute: typeof EventsRoute
+  FinanceRoute: typeof FinanceRoute
+  InventoryRoute: typeof InventoryRoute
   LoginRoute: typeof LoginRoute
+  MeetingsRoute: typeof MeetingsRoute
   MembersRoute: typeof MembersRoute
   MoreRoute: typeof MoreRoute
+  NoticesRoute: typeof NoticesRoute
+  NotificationsRoute: typeof NotificationsRoute
   OtpRoute: typeof OtpRoute
+  PaymentsRoute: typeof PaymentsRoute
   ProfileRoute: typeof ProfileRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
+  AdminAuditRoute: typeof AdminAuditRoute
+  AdminPermissionsRoute: typeof AdminPermissionsRoute
+  AdminRolesRoute: typeof AdminRolesRoute
+  AdminUsersRoute: typeof AdminUsersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/attendance': {
+      id: '/attendance'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof AttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -124,11 +326,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finance': {
+      id: '/finance'
+      path: '/finance'
+      fullPath: '/finance'
+      preLoaderRoute: typeof FinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inventory': {
+      id: '/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meetings': {
+      id: '/meetings'
+      path: '/meetings'
+      fullPath: '/meetings'
+      preLoaderRoute: typeof MeetingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/members': {
@@ -145,11 +375,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notices': {
+      id: '/notices'
+      path: '/notices'
+      fullPath: '/notices'
+      preLoaderRoute: typeof NoticesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/otp': {
       id: '/otp'
       path: '/otp'
       fullPath: '/otp'
       preLoaderRoute: typeof OtpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments': {
+      id: '/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof PaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -159,17 +410,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/admin/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/permissions': {
+      id: '/admin/permissions'
+      path: '/admin/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof AdminPermissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/roles': {
+      id: '/admin/roles'
+      path: '/admin/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AdminRolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AttendanceRoute: AttendanceRoute,
   DashboardRoute: DashboardRoute,
+  EventsRoute: EventsRoute,
+  FinanceRoute: FinanceRoute,
+  InventoryRoute: InventoryRoute,
   LoginRoute: LoginRoute,
+  MeetingsRoute: MeetingsRoute,
   MembersRoute: MembersRoute,
   MoreRoute: MoreRoute,
+  NoticesRoute: NoticesRoute,
+  NotificationsRoute: NotificationsRoute,
   OtpRoute: OtpRoute,
+  PaymentsRoute: PaymentsRoute,
   ProfileRoute: ProfileRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
+  AdminAuditRoute: AdminAuditRoute,
+  AdminPermissionsRoute: AdminPermissionsRoute,
+  AdminRolesRoute: AdminRolesRoute,
+  AdminUsersRoute: AdminUsersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
