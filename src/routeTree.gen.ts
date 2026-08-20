@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MembersRouteImport } from './routes/members'
+import { Route as MoreRouteImport } from './routes/more'
 import { Route as OtpRouteImport } from './routes/otp'
 import { Route as ProfileRouteImport } from './routes/profile'
 
@@ -30,6 +32,16 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MembersRoute = MembersRouteImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoreRoute = MoreRouteImport.update({
+  id: '/more',
+  path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OtpRoute = OtpRouteImport.update({
   id: '/otp',
   path: '/otp',
@@ -45,6 +57,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/members': typeof MembersRoute
+  '/more': typeof MoreRoute
   '/otp': typeof OtpRoute
   '/profile': typeof ProfileRoute
 }
@@ -52,6 +66,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/members': typeof MembersRoute
+  '/more': typeof MoreRoute
   '/otp': typeof OtpRoute
   '/profile': typeof ProfileRoute
 }
@@ -60,21 +76,34 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/members': typeof MembersRoute
+  '/more': typeof MoreRoute
   '/otp': typeof OtpRoute
   '/profile': typeof ProfileRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/otp' | '/profile'
+  fullPaths:
+    '/' | '/dashboard' | '/login' | '/members' | '/more' | '/otp' | '/profile'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/otp' | '/profile'
-  id: '__root__' | '/' | '/dashboard' | '/login' | '/otp' | '/profile'
+  to: '/' | '/dashboard' | '/login' | '/members' | '/more' | '/otp' | '/profile'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/members'
+    | '/more'
+    | '/otp'
+    | '/profile'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
+  MembersRoute: typeof MembersRoute
+  MoreRoute: typeof MoreRoute
   OtpRoute: typeof OtpRoute
   ProfileRoute: typeof ProfileRoute
 }
@@ -102,6 +131,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/members': {
+      id: '/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof MembersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/more': {
+      id: '/more'
+      path: '/more'
+      fullPath: '/more'
+      preLoaderRoute: typeof MoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/otp': {
       id: '/otp'
       path: '/otp'
@@ -123,6 +166,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
+  MembersRoute: MembersRoute,
+  MoreRoute: MoreRoute,
   OtpRoute: OtpRoute,
   ProfileRoute: ProfileRoute,
 }
