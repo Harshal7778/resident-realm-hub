@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 
 interface EmptyStateProps {
   title: string;
-  description?: string;
-  icon?: LucideIcon;
-  action?: ReactNode;
+  description?: string | undefined;
+  icon?: LucideIcon | undefined;
+  action?: ReactNode | undefined;
 }
 
 export function EmptyState({ title, description, icon: Icon = Inbox, action }: EmptyStateProps) {

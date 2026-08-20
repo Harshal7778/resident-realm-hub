@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 
 interface AppHeaderProps {
   title: string;
-  subtitle?: string;
-  showBack?: boolean;
-  action?: ReactNode;
+  subtitle?: string | undefined;
+  showBack?: boolean | undefined;
+  action?: ReactNode | undefined;
 }
 
 export function AppHeader({ title, subtitle, showBack, action }: AppHeaderProps) {

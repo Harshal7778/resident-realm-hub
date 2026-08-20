@@ -8,7 +8,7 @@ export function ModulePlaceholder({
   description = "Coming in the next module.",
 }: {
   title: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | undefined;
   description?: string;
 }) {
   return <EmptyState icon={icon} title={title} description={description} />;
