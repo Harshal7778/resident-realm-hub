@@ -31,6 +31,7 @@ import { Route as AdminPermissionsRouteImport } from './routes/admin.permissions
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as MembersIndexRouteImport } from './routes/members.index'
+import { Route as MembersIdRouteImport } from './routes/members.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -142,6 +143,11 @@ const MembersIndexRoute = MembersIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MembersRoute,
 } as any)
+const MembersIdRoute = MembersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => MembersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/members/$id': typeof MembersIdRoute
   '/members/': typeof MembersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/members/$id': typeof MembersIdRoute
   '/members': typeof MembersIndexRoute
 }
 export interface FileRoutesById {
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/admin/permissions': typeof AdminPermissionsRoute
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
+  '/members/$id': typeof MembersIdRoute
   '/members/': typeof MembersIndexRoute
 }
 export interface FileRouteTypes {
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/roles'
     | '/admin/users'
+    | '/members/$id'
     | '/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -262,6 +272,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/roles'
     | '/admin/users'
+    | '/members/$id'
     | '/members'
   id:
     | '__root__'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/roles'
     | '/admin/users'
+    | '/members/$id'
     | '/members/'
   fileRoutesById: FileRoutesById
 }
@@ -469,14 +481,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MembersIndexRouteImport
       parentRoute: typeof MembersRoute
     }
+    '/members/$id': {
+      id: '/members/$id'
+      path: '/$id'
+      fullPath: '/members/$id'
+      preLoaderRoute: typeof MembersIdRouteImport
+      parentRoute: typeof MembersRoute
+    }
   }
 }
 
 interface MembersRouteChildren {
+  MembersIdRoute: typeof MembersIdRoute
   MembersIndexRoute: typeof MembersIndexRoute
 }
 
 const MembersRouteChildren: MembersRouteChildren = {
+  MembersIdRoute: MembersIdRoute,
   MembersIndexRoute: MembersIndexRoute,
 }
 
