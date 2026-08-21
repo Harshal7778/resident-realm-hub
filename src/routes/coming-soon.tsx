@@ -1,18 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Rocket } from "lucide-react";
-import { z } from "zod";
-import { fallback, zodValidator } from "@tanstack/zod-adapter";
 
 import { EmptyState } from "@/components/common/EmptyState";
 import { ProtectedPage } from "@/components/layout/ProtectedPage";
 import { Button } from "@/components/ui/button";
 
-const searchSchema = z.object({
-  feature: fallback(z.string(), "").default(""),
-});
-
 export const Route = createFileRoute("/coming-soon")({
-  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: "Coming next — Society Management" },
@@ -25,15 +18,13 @@ export const Route = createFileRoute("/coming-soon")({
 });
 
 function ComingSoonPage() {
-  const { feature } = Route.useSearch();
   const navigate = useNavigate();
-  const label = feature.slice(0, 60);
 
   return (
-    <ProtectedPage title="Coming next" subtitle={label || "In development"} showBack>
+    <ProtectedPage title="Coming next" subtitle="In development" showBack>
       <EmptyState
         icon={Rocket}
-        title={label ? `${label} is coming next` : "Coming next"}
+        title="Coming next"
         description="This module is part of the next build phase. Member management is fully live today."
         action={
           <Button className="mt-2 h-11" onClick={() => navigate({ to: "/dashboard" })}>
