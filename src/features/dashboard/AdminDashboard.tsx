@@ -20,16 +20,15 @@ import type { User } from "@/types/domain";
 interface QuickAction {
   label: string;
   icon: LucideIcon;
-  to: string;
 }
 
 const quickActions: QuickAction[] = [
-  { label: "Create Event", icon: CalendarPlus, to: "/events" },
-  { label: "Record Payment", icon: Wallet, to: "/finance" },
-  { label: "Add Expense", icon: ReceiptText, to: "/finance" },
-  { label: "Create Meeting", icon: Users, to: "/meetings" },
-  { label: "Create Notice", icon: Bell, to: "/notices" },
-  { label: "Add Inventory", icon: PackagePlus, to: "/inventory" },
+  { label: "Create Event", icon: CalendarPlus },
+  { label: "Record Payment", icon: Wallet },
+  { label: "Add Expense", icon: ReceiptText },
+  { label: "Create Meeting", icon: Users },
+  { label: "Create Notice", icon: Bell },
+  { label: "Add Inventory", icon: PackagePlus },
 ];
 
 export function AdminDashboard({ user, memberCount }: { user: User; memberCount: number }) {
@@ -56,7 +55,12 @@ export function AdminDashboard({ user, memberCount }: { user: User; memberCount:
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        <StatCard label="Members" value={String(memberCount)} icon={Users} />
+        <StatCard
+          label="Members"
+          value={String(memberCount)}
+          icon={Users}
+          onClick={() => navigate({ to: "/members" })}
+        />
         <StatCard label="Expected" value="₹25,000" icon={IndianRupee} />
         <StatCard label="Collected" value="₹23,500" tone="positive" />
         <StatCard label="Pending" value="₹1,500" tone="warning" />
@@ -69,11 +73,11 @@ export function AdminDashboard({ user, memberCount }: { user: User; memberCount:
       <section>
         <h3 className="mb-2 text-sm font-semibold text-foreground">Quick actions</h3>
         <div className="grid grid-cols-3 gap-3">
-          {quickActions.map(({ label, icon: Icon, to }) => (
+          {quickActions.map(({ label, icon: Icon }) => (
             <button
               key={label}
               type="button"
-              onClick={() => navigate({ to })}
+              onClick={() => navigate({ to: "/coming-soon" })}
               className="flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card px-2 py-3 text-center text-xs font-medium text-foreground transition-colors hover:bg-accent"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -87,7 +91,7 @@ export function AdminDashboard({ user, memberCount }: { user: User; memberCount:
 
       <p className="flex items-center gap-2 rounded-2xl bg-muted p-3 text-xs text-muted-foreground">
         <CalendarDays className="h-4 w-4 shrink-0" />
-        Demo figures only — no financial logic is calculated yet.
+        Financial figures are demo values until the finance module lands.
       </p>
     </div>
   );
