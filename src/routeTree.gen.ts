@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AttendanceRouteImport } from './routes/attendance'
+import { Route as ComingSoonRouteImport } from './routes/coming-soon'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as FinanceRouteImport } from './routes/finance'
@@ -41,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
 const AttendanceRoute = AttendanceRouteImport.update({
   id: '/attendance',
   path: '/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComingSoonRoute = ComingSoonRouteImport.update({
+  id: '/coming-soon',
+  path: '/coming-soon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -152,6 +158,7 @@ const MembersIdRoute = MembersIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceRoute
+  '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
   '/events': typeof EventsRoute
   '/finance': typeof FinanceRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceRoute
+  '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
   '/events': typeof EventsRoute
   '/finance': typeof FinanceRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceRoute
+  '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
   '/events': typeof EventsRoute
   '/finance': typeof FinanceRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/attendance'
+    | '/coming-soon'
     | '/dashboard'
     | '/events'
     | '/finance'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/attendance'
+    | '/coming-soon'
     | '/dashboard'
     | '/events'
     | '/finance'
@@ -278,6 +289,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/attendance'
+    | '/coming-soon'
     | '/dashboard'
     | '/events'
     | '/finance'
@@ -304,6 +316,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AttendanceRoute: typeof AttendanceRoute
+  ComingSoonRoute: typeof ComingSoonRoute
   DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRoute
   FinanceRoute: typeof FinanceRoute
@@ -339,6 +352,13 @@ declare module '@tanstack/react-router' {
       path: '/attendance'
       fullPath: '/attendance'
       preLoaderRoute: typeof AttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coming-soon': {
+      id: '/coming-soon'
+      path: '/coming-soon'
+      fullPath: '/coming-soon'
+      preLoaderRoute: typeof ComingSoonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -507,6 +527,7 @@ const MembersRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AttendanceRoute: AttendanceRoute,
+  ComingSoonRoute: ComingSoonRoute,
   DashboardRoute: DashboardRoute,
   EventsRoute: EventsRoute,
   FinanceRoute: FinanceRoute,
