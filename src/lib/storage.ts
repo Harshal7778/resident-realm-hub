@@ -6,6 +6,9 @@ export const STORAGE_KEYS = {
   members: "sm.members",
   session: "sm.session",
   seedVersion: "sm.seedVersion",
+  events: "sm.events",
+  contributions: "sm.contributions",
+  payments: "sm.payments",
 } as const;
 
 const isBrowser = () => typeof window !== "undefined" && !!window.localStorage;
