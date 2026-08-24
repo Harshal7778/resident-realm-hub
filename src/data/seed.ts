@@ -1,6 +1,15 @@
-import { ROLES, type House, type Member, type MobileNumber, type Role, type Society } from "@/types/domain";
+import {
+  EVENT_STATUSES,
+  ROLES,
+  type House,
+  type Member,
+  type MobileNumber,
+  type Role,
+  type Society,
+  type SocietyEvent,
+} from "@/types/domain";
 
-export const SEED_VERSION = "1";
+export const SEED_VERSION = "2";
 
 const NOW = "2026-01-01T00:00:00.000Z";
 const stamps = { createdAt: NOW, updatedAt: NOW };
@@ -92,3 +101,44 @@ export const DEMO_LOGIN_MOBILES: Record<Role, string> = {
   TREASURER: "9000000003",
   MEMBER: "9000000012",
 };
+
+export function buildSeedEvents(): SocietyEvent[] {
+  return [
+    {
+      id: "event-diwali-2026",
+      societyId: SOCIETY_ID,
+      name: "Diwali Function 2026",
+      type: "Festival",
+      description: "Society-wide Diwali celebration with dinner, rangoli and fireworks.",
+      startDate: "2026-11-06",
+      endDate: "2026-11-08",
+      standardContribution: 1000,
+      status: EVENT_STATUSES.ACTIVE,
+      ...stamps,
+    },
+    {
+      id: "event-holi-2026",
+      societyId: SOCIETY_ID,
+      name: "Holi Function 2026",
+      type: "Festival",
+      description: "Morning Holi celebration with organic colours and snacks.",
+      startDate: "2026-03-03",
+      endDate: "2026-03-03",
+      standardContribution: 500,
+      status: EVENT_STATUSES.DRAFT,
+      ...stamps,
+    },
+    {
+      id: "event-annual-2026",
+      societyId: SOCIETY_ID,
+      name: "Annual Society Function",
+      type: "Annual",
+      description: "Annual general function with cultural programme and prize distribution.",
+      startDate: "2026-01-26",
+      endDate: "2026-01-26",
+      standardContribution: 1500,
+      status: EVENT_STATUSES.ACTIVE,
+      ...stamps,
+    },
+  ];
+}
