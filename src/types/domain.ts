@@ -25,6 +25,9 @@ export const PERMISSIONS = {
   MANAGE_ROLES: "MANAGE_ROLES",
   VIEW_AUDIT_LOGS: "VIEW_AUDIT_LOGS",
   MANAGE_SETTINGS: "MANAGE_SETTINGS",
+  RECORD_PAYMENT: "RECORD_PAYMENT",
+  CLOSE_EVENT: "CLOSE_EVENT",
+  UNLOCK_EVENT: "UNLOCK_EVENT",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -90,4 +93,77 @@ export interface ServiceResult<T> {
   ok: boolean;
   data?: T;
   error?: string;
+}
+
+export const EVENT_STATUSES = {
+  DRAFT: "DRAFT",
+  ACTIVE: "ACTIVE",
+  CLOSED: "CLOSED",
+} as const;
+
+export type EventStatus = (typeof EVENT_STATUSES)[keyof typeof EVENT_STATUSES];
+
+export interface SocietyEvent extends Timestamps {
+  id: string;
+  societyId: string;
+  name: string;
+  type: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  standardContribution: number;
+  status: EventStatus;
+  closedAt?: string;
+  unlockReason?: string;
+  unlockedAt?: string;
+}
+
+export const CONTRIBUTION_STATUSES = {
+  PENDING: "PENDING",
+  PARTIAL: "PARTIAL",
+  PAID: "PAID",
+} as const;
+
+export type ContributionStatus =
+  (typeof CONTRIBUTION_STATUSES)[keyof typeof CONTRIBUTION_STATUSES];
+
+export interface Contribution extends Timestamps {
+  id: string;
+  eventId: string;
+  houseId: string;
+  houseNumber: string;
+  memberId: string;
+  memberName: string;
+  requiredAmount: number;
+  regularPaid: number;
+  extraPaid: number;
+  status: ContributionStatus;
+}
+
+export const PAYMENT_TYPES = {
+  REGULAR: "REGULAR",
+  EXTRA: "EXTRA",
+} as const;
+
+export type PaymentType = (typeof PAYMENT_TYPES)[keyof typeof PAYMENT_TYPES];
+
+export interface Payment extends Timestamps {
+  id: string;
+  eventId: string;
+  contributionId: string;
+  houseId: string;
+  houseNumber: string;
+  amount: number;
+  type: PaymentType;
+  paidAt: string;
+  note: string;
+}
+
+export interface EventTotals {
+  expected: number;
+  collected: number;
+  extra: number;
+  pending: number;
+  expenses: number;
+  balance: number;
 }
