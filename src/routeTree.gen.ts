@@ -31,6 +31,7 @@ import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminPermissionsRouteImport } from './routes/admin.permissions'
 import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as MembersIndexRouteImport } from './routes/members.index'
 import { Route as MembersIdRouteImport } from './routes/members.$id'
 
@@ -144,6 +145,11 @@ const AdminUsersRoute = AdminUsersRouteImport.update({
   path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsIndexRoute = EventsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EventsRoute,
+} as any)
 const MembersIndexRoute = MembersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -160,7 +166,7 @@ export interface FileRoutesByFullPath {
   '/attendance': typeof AttendanceRoute
   '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
-  '/events': typeof EventsRoute
+  '/events': typeof EventsRouteWithChildren
   '/finance': typeof FinanceRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
@@ -179,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/members/$id': typeof MembersIdRoute
+  '/events/': typeof EventsIndexRoute
   '/members/': typeof MembersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -186,7 +193,6 @@ export interface FileRoutesByTo {
   '/attendance': typeof AttendanceRoute
   '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
-  '/events': typeof EventsRoute
   '/finance': typeof FinanceRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
@@ -204,6 +210,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/members/$id': typeof MembersIdRoute
+  '/events': typeof EventsIndexRoute
   '/members': typeof MembersIndexRoute
 }
 export interface FileRoutesById {
@@ -212,7 +219,7 @@ export interface FileRoutesById {
   '/attendance': typeof AttendanceRoute
   '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
-  '/events': typeof EventsRoute
+  '/events': typeof EventsRouteWithChildren
   '/finance': typeof FinanceRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
@@ -231,6 +238,7 @@ export interface FileRoutesById {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/members/$id': typeof MembersIdRoute
+  '/events/': typeof EventsIndexRoute
   '/members/': typeof MembersIndexRoute
 }
 export interface FileRouteTypes {
@@ -259,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/users'
     | '/members/$id'
+    | '/events/'
     | '/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -266,7 +275,6 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/coming-soon'
     | '/dashboard'
-    | '/events'
     | '/finance'
     | '/inventory'
     | '/login'
@@ -284,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/users'
     | '/members/$id'
+    | '/events'
     | '/members'
   id:
     | '__root__'
@@ -310,6 +319,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/users'
     | '/members/$id'
+    | '/events/'
     | '/members/'
   fileRoutesById: FileRoutesById
 }
@@ -318,7 +328,7 @@ export interface RootRouteChildren {
   AttendanceRoute: typeof AttendanceRoute
   ComingSoonRoute: typeof ComingSoonRoute
   DashboardRoute: typeof DashboardRoute
-  EventsRoute: typeof EventsRoute
+  EventsRoute: typeof EventsRouteWithChildren
   FinanceRoute: typeof FinanceRoute
   InventoryRoute: typeof InventoryRoute
   LoginRoute: typeof LoginRoute
@@ -494,6 +504,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events/': {
+      id: '/events/'
+      path: '/'
+      fullPath: '/events/'
+      preLoaderRoute: typeof EventsIndexRouteImport
+      parentRoute: typeof EventsRoute
+    }
     '/members/': {
       id: '/members/'
       path: '/'
@@ -510,6 +527,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface EventsRouteChildren {
+  EventsIndexRoute: typeof EventsIndexRoute
+}
+
+const EventsRouteChildren: EventsRouteChildren = {
+  EventsIndexRoute: EventsIndexRoute,
+}
+
+const EventsRouteWithChildren =
+  EventsRoute._addFileChildren(EventsRouteChildren)
 
 interface MembersRouteChildren {
   MembersIdRoute: typeof MembersIdRoute
@@ -529,7 +557,7 @@ const rootRouteChildren: RootRouteChildren = {
   AttendanceRoute: AttendanceRoute,
   ComingSoonRoute: ComingSoonRoute,
   DashboardRoute: DashboardRoute,
-  EventsRoute: EventsRoute,
+  EventsRoute: EventsRouteWithChildren,
   FinanceRoute: FinanceRoute,
   InventoryRoute: InventoryRoute,
   LoginRoute: LoginRoute,
