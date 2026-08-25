@@ -15,7 +15,6 @@ import { useAuth } from "@/context/AuthContext";
 import { ContributionList } from "@/features/events/ContributionList";
 import { UnlockEventDialog } from "@/features/events/UnlockEventDialog";
 import { contributionStatusTone, eventStatusTone } from "@/features/events/status";
-import { RecordPaymentSheet } from "@/features/events/RecordPaymentSheet";
 import { formatDateRange, formatINR } from "@/lib/format";
 import { contributionService, totalsFor } from "@/services/contributionService";
 import { eventService } from "@/services/eventService";
