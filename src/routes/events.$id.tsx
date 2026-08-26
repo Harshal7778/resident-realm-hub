@@ -1,5 +1,5 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
-import { Lock, LockOpen, Receipt } from "lucide-react";
+import { Link, createFileRoute, useParams } from "@tanstack/react-router";
+import { ArrowRight, Lock, LockOpen, Receipt } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -13,13 +13,16 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/context/AuthContext";
 import { ContributionList } from "@/features/events/ContributionList";
+import { ExpenseList } from "@/features/events/ExpenseList";
 import { UnlockEventDialog } from "@/features/events/UnlockEventDialog";
 import { contributionStatusTone, eventStatusTone } from "@/features/events/status";
 import { formatDateRange, formatINR } from "@/lib/format";
 import { contributionService, totalsFor } from "@/services/contributionService";
 import { eventService } from "@/services/eventService";
+import { expenseService, expenseTotal, type ExpenseInput } from "@/services/expenseService";
 import { paymentService, type PaymentInput } from "@/services/paymentService";
-import { PERMISSIONS, ROLES, type Contribution, type Payment, type SocietyEvent } from "@/types/domain";
+import { PERMISSIONS, ROLES, type Contribution, type Expense, type Payment, type SocietyEvent } from "@/types/domain";
+
 
 export const Route = createFileRoute("/events/$id")({
   head: () => ({
