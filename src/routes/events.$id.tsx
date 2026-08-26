@@ -42,17 +42,21 @@ function EventDetailPage() {
   const [event, setEvent] = useState<SocietyEvent | null>(null);
   const [contributions, setContributions] = useState<Contribution[] | null>(null);
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const load = useCallback(async () => {
-    const [e, c, p] = await Promise.all([
+    const [e, c, p, x] = await Promise.all([
       eventService.getEventById(id),
       contributionService.listByEvent(id),
       paymentService.listByEvent(id),
+      expenseService.listByEvent(id),
     ]);
     setEvent(e);
     setContributions(c);
     setPayments(p);
+    setExpenses(x);
   }, [id]);
+
 
   useEffect(() => {
     void load();
