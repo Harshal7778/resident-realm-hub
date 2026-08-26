@@ -167,3 +167,19 @@ export interface EventTotals {
   expenses: number;
   balance: number;
 }
+
+export const EXPENSE_CATEGORIES = ["Food", "Decoration", "Sound", "Venue", "Transport", "Other"] as const;
+
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
+
+export interface Expense extends Timestamps {
+  id: string;
+  eventId: string;
+  category: ExpenseCategory;
+  description: string;
+  amount: number;
+  expenseDate: string;
+  /** Prototype: local/mock file reference only (name of the picked receipt). */
+  receipt: string;
+  notes: string;
+}
