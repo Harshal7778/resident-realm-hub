@@ -327,12 +327,32 @@ function EventDetailPage() {
           </TabsContent>
 
           <TabsContent value="expenses" className="mt-3">
-            <EmptyState
-              icon={Receipt}
-              title="Expenses coming next"
-              description="The expense module lands in the next build phase."
-            />
+            {isMemberOnly ? (
+              <EmptyState
+                icon={Receipt}
+                title="Expenses are committee-only"
+                description={`Total event expenses: ${formatINR(totals.expenses)}`}
+              />
+            ) : (
+              <div className="space-y-3">
+                <ExpenseList
+                  eventId={event.id}
+                  expenses={expenses}
+                  canManage={canManageExpenses}
+                  locked={locked}
+                  onAdd={addExpense}
+                  onEdit={editExpense}
+                  onRemove={removeExpense}
+                />
+                <Button asChild variant="outline" className="h-11 w-full rounded-xl">
+                  <Link to="/events/$id/expenses" params={{ id: event.id }}>
+                    Open expenses page <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </TabsContent>
+
         </Tabs>
       </div>
     </ProtectedPage>
