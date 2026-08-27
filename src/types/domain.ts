@@ -183,3 +183,81 @@ export interface Expense extends Timestamps {
   receipt: string;
   notes: string;
 }
+
+export interface Meeting extends Timestamps {
+  id: string;
+  societyId: string;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+}
+
+export const ATTENDANCE_STATUSES = {
+  PRESENT: "PRESENT",
+  ABSENT: "ABSENT",
+} as const;
+
+export type AttendanceStatus = (typeof ATTENDANCE_STATUSES)[keyof typeof ATTENDANCE_STATUSES];
+
+export interface AttendanceRecord extends Timestamps {
+  id: string;
+  meetingId: string;
+  houseId: string;
+  houseNumber: string;
+  memberId: string;
+  memberName: string;
+  status: AttendanceStatus;
+}
+
+export const NOTICE_PRIORITIES = {
+  IMPORTANT: "IMPORTANT",
+  NORMAL: "NORMAL",
+} as const;
+
+export type NoticePriority = (typeof NOTICE_PRIORITIES)[keyof typeof NOTICE_PRIORITIES];
+
+export const NOTICE_STATUSES = {
+  DRAFT: "DRAFT",
+  PUBLISHED: "PUBLISHED",
+} as const;
+
+export type NoticeStatus = (typeof NOTICE_STATUSES)[keyof typeof NOTICE_STATUSES];
+
+export interface Notice extends Timestamps {
+  id: string;
+  societyId: string;
+  title: string;
+  message: string;
+  priority: NoticePriority;
+  status: NoticeStatus;
+  publishDate: string;
+  expiryDate: string;
+}
+
+export const NOTIFICATION_TYPES = {
+  NEW_NOTICE: "NEW_NOTICE",
+  MEETING_REMINDER: "MEETING_REMINDER",
+  CONTRIBUTION_REMINDER: "CONTRIBUTION_REMINDER",
+  NEW_EVENT: "NEW_EVENT",
+  PAYMENT_RECORDED: "PAYMENT_RECORDED",
+  INVENTORY_APPROVED: "INVENTORY_APPROVED",
+  INVENTORY_ISSUED: "INVENTORY_ISSUED",
+  INVENTORY_RETURN_REMINDER: "INVENTORY_RETURN_REMINDER",
+  INVENTORY_OVERDUE: "INVENTORY_OVERDUE",
+} as const;
+
+export type NotificationType = (typeof NOTIFICATION_TYPES)[keyof typeof NOTIFICATION_TYPES];
+
+export interface AppNotification {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
+  /** Optional in-app deep link (e.g. /notices). */
+  link?: string;
+}

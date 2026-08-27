@@ -10,6 +10,10 @@ export const STORAGE_KEYS = {
   contributions: "sm.contributions",
   payments: "sm.payments",
   expenses: "sm.expenses",
+  meetings: "sm.meetings",
+  attendance: "sm.attendance",
+  notices: "sm.notices",
+  notifications: "sm.notifications",
 } as const;
 
 const isBrowser = () => typeof window !== "undefined" && !!window.localStorage;
