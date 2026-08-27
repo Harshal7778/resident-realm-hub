@@ -228,6 +228,46 @@ function EventDetailPage() {
               <StatCard label="Balance" value={formatINR(totals.balance)} tone="positive" />
             </div>
 
+            <section className="rounded-2xl border border-border bg-card p-4">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-sm font-semibold text-foreground">Financial summary</h3>
+                <StatusBadge
+                  label={locked ? "Event closed" : "Live"}
+                  tone={locked ? "neutral" : "success"}
+                />
+              </div>
+              <dl className="mt-3 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Expected</dt>
+                  <dd className="font-medium">{formatINR(totals.expected)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Collected (regular)</dt>
+                  <dd className="font-medium text-success">{formatINR(totals.collected)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Extra</dt>
+                  <dd className="font-medium">{formatINR(totals.extra)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Pending</dt>
+                  <dd className="font-medium text-warning">{formatINR(totals.pending)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Expenses</dt>
+                  <dd className="font-medium">− {formatINR(totals.expenses)}</dd>
+                </div>
+                <div className="flex justify-between border-t border-border pt-2 text-base">
+                  <dt className="font-semibold">Balance</dt>
+                  <dd className="font-semibold">{formatINR(totals.balance)}</dd>
+                </div>
+              </dl>
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                Balance = Collected + Extra − Expenses
+              </p>
+            </section>
+
+
             {isMemberOnly && (
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-foreground">Your contribution</h3>
