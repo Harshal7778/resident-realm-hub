@@ -77,11 +77,54 @@ function EventDetailPage() {
     return payments;
   }, [payments, isMemberOnly, visibleContributions]);
 
-  const totals = useMemo(() => totalsFor(contributions ?? [], 0), [contributions]);
+  const totals = useMemo(
+    () => totalsFor(contributions ?? [], expenseTotal(expenses)),
+    [contributions, expenses],
+  );
   const locked = event ? eventService.isLocked(event) : false;
   const canRecord = can(PERMISSIONS.RECORD_PAYMENT);
   const canClose = can(PERMISSIONS.MANAGE_EVENTS) || can(PERMISSIONS.CLOSE_EVENT);
   const canUnlock = user?.role === ROLES.ADMIN;
+  const canManageExpenses = can(PERMISSIONS.MANAGE_FINANCE) || can(PERMISSIONS.MANAGE_EVENTS);
+
+  const addExpense = useCallback(
+    async (values: ExpenseInput) => {
+      const res = await expenseService.addExpense(values);
+      if (!res.ok) {
+        toast.error(res.error ?? "Could not add expense");
+        return false;
+      }
+      toast.success("Expense added");
+      await load();
+      return true;
+    },
+    [load],
+  );
+
+  const editExpense = useCallback(
+    async (expenseId: string, values: ExpenseInput) => {
+      const res = await expenseService.updateExpense(expenseId, values);
+      if (!res.ok) {
+        toast.error(res.error ?? "Could not save expense");
+        return false;
+      }
+      toast.success("Expense updated");
+      await load();
+      return true;
+    },
+    [load],
+  );
+
+  const removeExpense = useCallback(
+    async (expenseId: string) => {
+      const res = await expenseService.removeExpense(expenseId);
+      if (!res.ok) toast.error(res.error ?? "Could not remove expense");
+      else toast.success("Expense removed");
+      await load();
+    },
+    [load],
+  );
+
 
   const recordPayment = useCallback(
     async (values: PaymentInput) => {
