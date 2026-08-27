@@ -77,11 +77,54 @@ function EventDetailPage() {
     return payments;
   }, [payments, isMemberOnly, visibleContributions]);
 
-  const totals = useMemo(() => totalsFor(contributions ?? [], 0), [contributions]);
+  const totals = useMemo(
+    () => totalsFor(contributions ?? [], expenseTotal(expenses)),
+    [contributions, expenses],
+  );
   const locked = event ? eventService.isLocked(event) : false;
   const canRecord = can(PERMISSIONS.RECORD_PAYMENT);
   const canClose = can(PERMISSIONS.MANAGE_EVENTS) || can(PERMISSIONS.CLOSE_EVENT);
   const canUnlock = user?.role === ROLES.ADMIN;
+  const canManageExpenses = can(PERMISSIONS.MANAGE_FINANCE) || can(PERMISSIONS.MANAGE_EVENTS);
+
+  const addExpense = useCallback(
+    async (values: ExpenseInput) => {
+      const res = await expenseService.addExpense(values);
+      if (!res.ok) {
+        toast.error(res.error ?? "Could not add expense");
+        return false;
+      }
+      toast.success("Expense added");
+      await load();
+      return true;
+    },
+    [load],
+  );
+
+  const editExpense = useCallback(
+    async (expenseId: string, values: ExpenseInput) => {
+      const res = await expenseService.updateExpense(expenseId, values);
+      if (!res.ok) {
+        toast.error(res.error ?? "Could not save expense");
+        return false;
+      }
+      toast.success("Expense updated");
+      await load();
+      return true;
+    },
+    [load],
+  );
+
+  const removeExpense = useCallback(
+    async (expenseId: string) => {
+      const res = await expenseService.removeExpense(expenseId);
+      if (!res.ok) toast.error(res.error ?? "Could not remove expense");
+      else toast.success("Expense removed");
+      await load();
+    },
+    [load],
+  );
+
 
   const recordPayment = useCallback(
     async (values: PaymentInput) => {
@@ -185,6 +228,46 @@ function EventDetailPage() {
               <StatCard label="Balance" value={formatINR(totals.balance)} tone="positive" />
             </div>
 
+            <section className="rounded-2xl border border-border bg-card p-4">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-sm font-semibold text-foreground">Financial summary</h3>
+                <StatusBadge
+                  label={locked ? "Event closed" : "Live"}
+                  tone={locked ? "neutral" : "success"}
+                />
+              </div>
+              <dl className="mt-3 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Expected</dt>
+                  <dd className="font-medium">{formatINR(totals.expected)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Collected (regular)</dt>
+                  <dd className="font-medium text-success">{formatINR(totals.collected)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Extra</dt>
+                  <dd className="font-medium">{formatINR(totals.extra)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Pending</dt>
+                  <dd className="font-medium text-warning">{formatINR(totals.pending)}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Expenses</dt>
+                  <dd className="font-medium">− {formatINR(totals.expenses)}</dd>
+                </div>
+                <div className="flex justify-between border-t border-border pt-2 text-base">
+                  <dt className="font-semibold">Balance</dt>
+                  <dd className="font-semibold">{formatINR(totals.balance)}</dd>
+                </div>
+              </dl>
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                Balance = Collected + Extra − Expenses
+              </p>
+            </section>
+
+
             {isMemberOnly && (
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-foreground">Your contribution</h3>
@@ -284,12 +367,32 @@ function EventDetailPage() {
           </TabsContent>
 
           <TabsContent value="expenses" className="mt-3">
-            <EmptyState
-              icon={Receipt}
-              title="Expenses coming next"
-              description="The expense module lands in the next build phase."
-            />
+            {isMemberOnly ? (
+              <EmptyState
+                icon={Receipt}
+                title="Expenses are committee-only"
+                description={`Total event expenses: ${formatINR(totals.expenses)}`}
+              />
+            ) : (
+              <div className="space-y-3">
+                <ExpenseList
+                  eventId={event.id}
+                  expenses={expenses}
+                  canManage={canManageExpenses}
+                  locked={locked}
+                  onAdd={addExpense}
+                  onEdit={editExpense}
+                  onRemove={removeExpense}
+                />
+                <Button asChild variant="outline" className="h-11 w-full rounded-xl">
+                  <Link to="/events/$id/expenses" params={{ id: event.id }}>
+                    Open expenses page <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </TabsContent>
+
         </Tabs>
       </div>
     </ProtectedPage>
