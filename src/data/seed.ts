@@ -1,5 +1,9 @@
 import {
   EVENT_STATUSES,
+  type AppNotification,
+  type AttendanceRecord,
+  type Meeting,
+  type Notice,
   ROLES,
   type House,
   type Member,
@@ -9,7 +13,7 @@ import {
   type SocietyEvent,
 } from "@/types/domain";
 
-export const SEED_VERSION = "2";
+export const SEED_VERSION = "3";
 
 const NOW = "2026-01-01T00:00:00.000Z";
 const stamps = { createdAt: NOW, updatedAt: NOW };
@@ -141,4 +145,130 @@ export function buildSeedEvents(): SocietyEvent[] {
       ...stamps,
     },
   ];
+}
+
+export function buildSeedMeetings(): Meeting[] {
+  return [
+    {
+      id: "meeting-monthly-aug-2026",
+      societyId: SOCIETY_ID,
+      title: "Monthly Society Meeting",
+      date: "2026-08-25",
+      time: "20:00",
+      location: "Society Hall",
+      description: "Monthly review of maintenance, security and upcoming festival planning.",
+      ...stamps,
+    },
+    {
+      id: "meeting-agm-2026",
+      societyId: SOCIETY_ID,
+      title: "Annual General Meeting",
+      date: "2026-09-20",
+      time: "19:30",
+      location: "Society Garden",
+      description: "Annual accounts presentation, committee election and member grievances.",
+      ...stamps,
+    },
+  ];
+}
+
+/** Attendance history for the monthly meeting: 21 present, 4 absent. */
+export function buildSeedAttendance(houses: House[], members: Member[]): AttendanceRecord[] {
+  const absentHouses = new Set(["H05", "H11", "H18", "H24"]);
+  return houses.map((house) => {
+    const member = members.find((m) => m.houseId === house.id);
+    return {
+      id: `att-meeting-monthly-aug-2026-${house.id}`,
+      meetingId: "meeting-monthly-aug-2026",
+      houseId: house.id,
+      houseNumber: house.houseNumber,
+      memberId: member?.id ?? "",
+      memberName: member?.name ?? house.ownerName,
+      status: absentHouses.has(house.houseNumber) ? "ABSENT" : "PRESENT",
+      ...stamps,
+    } satisfies AttendanceRecord;
+  });
+}
+
+export function buildSeedNotices(): Notice[] {
+  return [
+    {
+      id: "notice-water-tank",
+      societyId: SOCIETY_ID,
+      title: "Water tank cleaning",
+      message: "Water tank cleaning today at 5 PM. Please store water in advance. Supply resumes by 8 PM.",
+      priority: "IMPORTANT",
+      status: "PUBLISHED",
+      publishDate: "2026-08-20",
+      expiryDate: "2026-09-20",
+      ...stamps,
+    },
+    {
+      id: "notice-parking",
+      societyId: SOCIETY_ID,
+      title: "Parking discipline",
+      message: "Kindly park vehicles inside the allotted slot only. Visitor vehicles must use the gate parking bay.",
+      priority: "NORMAL",
+      status: "PUBLISHED",
+      publishDate: "2026-08-10",
+      expiryDate: "2026-10-10",
+      ...stamps,
+    },
+    {
+      id: "notice-maintenance-due",
+      societyId: SOCIETY_ID,
+      title: "Quarterly maintenance due",
+      message: "Quarterly maintenance of ₹3,000 per house is due before 10 September. Cash receipts at the office.",
+      priority: "IMPORTANT",
+      status: "PUBLISHED",
+      publishDate: "2026-08-28",
+      expiryDate: "2026-09-15",
+      ...stamps,
+    },
+  ];
+}
+
+export function buildSeedNotifications(members: Member[]): AppNotification[] {
+  const templates: Array<Omit<AppNotification, "id" | "userId">> = [
+    {
+      type: "NEW_NOTICE",
+      title: "Water tank cleaning",
+      message: "IMPORTANT: Water tank cleaning today at 5 PM.",
+      timestamp: "2026-08-20T09:00:00.000Z",
+      read: false,
+      link: "/notices",
+    },
+    {
+      type: "MEETING_REMINDER",
+      title: "Monthly Society Meeting",
+      message: "Meeting on 25 Aug 2026 at 8:00 PM, Society Hall.",
+      timestamp: "2026-08-24T04:30:00.000Z",
+      read: false,
+      link: "/meetings",
+    },
+    {
+      type: "CONTRIBUTION_REMINDER",
+      title: "Contribution pending",
+      message: "Your Diwali Function 2026 contribution is still pending.",
+      timestamp: "2026-08-18T06:00:00.000Z",
+      read: true,
+      link: "/events",
+    },
+    {
+      type: "NEW_EVENT",
+      title: "Diwali Function 2026",
+      message: "A new event has been created. Standard contribution ₹1,000.",
+      timestamp: "2026-08-05T10:15:00.000Z",
+      read: true,
+      link: "/events",
+    },
+  ];
+
+  return members.flatMap((member) =>
+    templates.map((t, i) => ({
+      ...t,
+      id: `notif-seed-${member.id}-${i + 1}`,
+      userId: member.id,
+    })),
+  );
 }
