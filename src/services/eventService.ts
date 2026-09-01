@@ -6,8 +6,10 @@ import {
   saveContributions,
 } from "@/services/contributionService";
 import { ensureSeeded, memberService } from "@/services/memberService";
+import { notificationService } from "@/services/notificationService";
 import {
   EVENT_STATUSES,
+  NOTIFICATION_TYPES,
   type ServiceResult,
   type SocietyEvent,
 } from "@/types/domain";
@@ -105,6 +107,13 @@ export const eventService = {
       ...readContributions(),
       ...buildContributionsForEvent(event.id, event.standardContribution, houses, members),
     ]);
+
+    await notificationService.notify({
+      type: NOTIFICATION_TYPES.NEW_EVENT,
+      title: event.name,
+      message: `New event created. Standard contribution ₹${event.standardContribution.toLocaleString("en-IN")}.`,
+      link: "/events",
+    });
 
     return { ok: true, data: event };
   },

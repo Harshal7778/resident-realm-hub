@@ -2,7 +2,9 @@ import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
 import { readContributions, saveContributions, statusFor } from "@/services/contributionService";
 import { eventService } from "@/services/eventService";
 import { ensureSeeded } from "@/services/memberService";
+import { notificationService } from "@/services/notificationService";
 import {
+  NOTIFICATION_TYPES,
   PAYMENT_TYPES,
   type Contribution,
   type Payment,
@@ -94,6 +96,14 @@ export const paymentService = {
         updatedAt: now(),
       },
     ]);
+
+    await notificationService.notify({
+      type: NOTIFICATION_TYPES.PAYMENT_RECORDED,
+      title: "Payment recorded",
+      message: `₹${amount.toLocaleString("en-IN")} ${input.type.toLowerCase()} payment recorded for ${contribution.houseNumber} (${event.name}).`,
+      link: "/events",
+      ...(contribution.memberId ? { userIds: [contribution.memberId] } : {}),
+    });
 
     return { ok: true, data: updated };
   },
