@@ -2,7 +2,6 @@ import { buildSeedNotifications } from "@/data/seed";
 import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
 import { ensureSeeded } from "@/services/memberService";
 import type { AppNotification, Member, NotificationType } from "@/types/domain";
-import { STORAGE_KEYS as KEYS } from "@/lib/storage";
 
 const now = () => new Date().toISOString();
 const uid = (p: string) => `${p}-${Math.random().toString(36).slice(2, 9)}${Date.now().toString(36).slice(-4)}`;
@@ -25,7 +24,7 @@ function readAll(): AppNotification[] {
   ensureSeeded();
   const existing = readItem<AppNotification[]>(STORAGE_KEYS.notifications);
   if (existing) return existing;
-  const members = readItem<Member[]>(KEYS.members) ?? [];
+  const members = readItem<Member[]>(STORAGE_KEYS.members) ?? [];
   const seeded = buildSeedNotifications(members);
   writeItem(STORAGE_KEYS.notifications, seeded);
   return seeded;
@@ -37,7 +36,7 @@ function saveAll(next: AppNotification[]): void {
 
 function activeMemberIds(): string[] {
   ensureSeeded();
-  return (readItem<Member[]>(KEYS.members) ?? []).filter((m) => m.isActive).map((m) => m.id);
+  return (readItem<Member[]>(STORAGE_KEYS.members) ?? []).filter((m) => m.isActive).map((m) => m.id);
 }
 
 export interface NotifyInput {
