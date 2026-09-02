@@ -33,6 +33,8 @@ import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsIdRouteImport } from './routes/events.$id'
+import { Route as MeetingsIndexRouteImport } from './routes/meetings.index'
+import { Route as MeetingsIdRouteImport } from './routes/meetings.$id'
 import { Route as MembersIndexRouteImport } from './routes/members.index'
 import { Route as MembersIdRouteImport } from './routes/members.$id'
 import { Route as EventsIdExpensesRouteImport } from './routes/events.$id_.expenses'
@@ -157,6 +159,16 @@ const EventsIdRoute = EventsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => EventsRoute,
 } as any)
+const MeetingsIndexRoute = MeetingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MeetingsRoute,
+} as any)
+const MeetingsIdRoute = MeetingsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => MeetingsRoute,
+} as any)
 const MembersIndexRoute = MembersIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -182,7 +194,7 @@ export interface FileRoutesByFullPath {
   '/finance': typeof FinanceRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
-  '/meetings': typeof MeetingsRoute
+  '/meetings': typeof MeetingsRouteWithChildren
   '/members': typeof MembersRouteWithChildren
   '/more': typeof MoreRoute
   '/notices': typeof NoticesRoute
@@ -197,8 +209,10 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/events/$id': typeof EventsIdRoute
+  '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
   '/events/': typeof EventsIndexRoute
+  '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
 }
@@ -210,7 +224,6 @@ export interface FileRoutesByTo {
   '/finance': typeof FinanceRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
-  '/meetings': typeof MeetingsRoute
   '/more': typeof MoreRoute
   '/notices': typeof NoticesRoute
   '/notifications': typeof NotificationsRoute
@@ -224,8 +237,10 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/events/$id': typeof EventsIdRoute
+  '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
   '/events': typeof EventsIndexRoute
+  '/meetings': typeof MeetingsIndexRoute
   '/members': typeof MembersIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
 }
@@ -239,7 +254,7 @@ export interface FileRoutesById {
   '/finance': typeof FinanceRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
-  '/meetings': typeof MeetingsRoute
+  '/meetings': typeof MeetingsRouteWithChildren
   '/members': typeof MembersRouteWithChildren
   '/more': typeof MoreRoute
   '/notices': typeof NoticesRoute
@@ -254,8 +269,10 @@ export interface FileRoutesById {
   '/admin/roles': typeof AdminRolesRoute
   '/admin/users': typeof AdminUsersRoute
   '/events/$id': typeof EventsIdRoute
+  '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
   '/events/': typeof EventsIndexRoute
+  '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
   '/events/$id_/expenses': typeof EventsIdExpensesRoute
 }
@@ -285,8 +302,10 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/users'
     | '/events/$id'
+    | '/meetings/$id'
     | '/members/$id'
     | '/events/'
+    | '/meetings/'
     | '/members/'
     | '/events/$id/expenses'
   fileRoutesByTo: FileRoutesByTo
@@ -298,7 +317,6 @@ export interface FileRouteTypes {
     | '/finance'
     | '/inventory'
     | '/login'
-    | '/meetings'
     | '/more'
     | '/notices'
     | '/notifications'
@@ -312,8 +330,10 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/users'
     | '/events/$id'
+    | '/meetings/$id'
     | '/members/$id'
     | '/events'
+    | '/meetings'
     | '/members'
     | '/events/$id/expenses'
   id:
@@ -341,8 +361,10 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/users'
     | '/events/$id'
+    | '/meetings/$id'
     | '/members/$id'
     | '/events/'
+    | '/meetings/'
     | '/members/'
     | '/events/$id_/expenses'
   fileRoutesById: FileRoutesById
@@ -356,7 +378,7 @@ export interface RootRouteChildren {
   FinanceRoute: typeof FinanceRoute
   InventoryRoute: typeof InventoryRoute
   LoginRoute: typeof LoginRoute
-  MeetingsRoute: typeof MeetingsRoute
+  MeetingsRoute: typeof MeetingsRouteWithChildren
   MembersRoute: typeof MembersRouteWithChildren
   MoreRoute: typeof MoreRoute
   NoticesRoute: typeof NoticesRoute
@@ -542,6 +564,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsIdRouteImport
       parentRoute: typeof EventsRoute
     }
+    '/meetings/': {
+      id: '/meetings/'
+      path: '/'
+      fullPath: '/meetings/'
+      preLoaderRoute: typeof MeetingsIndexRouteImport
+      parentRoute: typeof MeetingsRoute
+    }
+    '/meetings/$id': {
+      id: '/meetings/$id'
+      path: '/$id'
+      fullPath: '/meetings/$id'
+      preLoaderRoute: typeof MeetingsIdRouteImport
+      parentRoute: typeof MeetingsRoute
+    }
     '/members/': {
       id: '/members/'
       path: '/'
@@ -581,6 +617,20 @@ const EventsRouteChildren: EventsRouteChildren = {
 const EventsRouteWithChildren =
   EventsRoute._addFileChildren(EventsRouteChildren)
 
+interface MeetingsRouteChildren {
+  MeetingsIdRoute: typeof MeetingsIdRoute
+  MeetingsIndexRoute: typeof MeetingsIndexRoute
+}
+
+const MeetingsRouteChildren: MeetingsRouteChildren = {
+  MeetingsIdRoute: MeetingsIdRoute,
+  MeetingsIndexRoute: MeetingsIndexRoute,
+}
+
+const MeetingsRouteWithChildren = MeetingsRoute._addFileChildren(
+  MeetingsRouteChildren,
+)
+
 interface MembersRouteChildren {
   MembersIdRoute: typeof MembersIdRoute
   MembersIndexRoute: typeof MembersIndexRoute
@@ -603,7 +653,7 @@ const rootRouteChildren: RootRouteChildren = {
   FinanceRoute: FinanceRoute,
   InventoryRoute: InventoryRoute,
   LoginRoute: LoginRoute,
-  MeetingsRoute: MeetingsRoute,
+  MeetingsRoute: MeetingsRouteWithChildren,
   MembersRoute: MembersRouteWithChildren,
   MoreRoute: MoreRoute,
   NoticesRoute: NoticesRoute,
