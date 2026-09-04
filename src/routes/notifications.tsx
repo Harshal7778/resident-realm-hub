@@ -117,7 +117,7 @@ function NotificationsPage() {
               return (
                 <li key={item.id}>
                   {item.link ? (
-                    <Link to={item.link} className={className} onClick={onOpen}>
+                    <Link to={item.link as "/notices"} className={className} onClick={onOpen}>
                       {body}
                     </Link>
                   ) : (
