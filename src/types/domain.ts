@@ -261,3 +261,102 @@ export interface AppNotification {
   /** Optional in-app deep link (e.g. /notices). */
   link?: string;
 }
+
+export const INVENTORY_CATEGORIES = [
+  "Utensils",
+  "Cookware",
+  "Furniture",
+  "Decoration",
+  "Electrical",
+  "Other",
+] as const;
+
+export type InventoryCategory = (typeof INVENTORY_CATEGORIES)[number];
+
+export interface InventoryItem extends Timestamps {
+  id: string;
+  societyId: string;
+  name: string;
+  category: InventoryCategory;
+  totalQuantity: number;
+  availableQuantity: number;
+  issuedQuantity: number;
+  damagedQuantity: number;
+  missingQuantity: number;
+  description: string;
+  isActive: boolean;
+}
+
+export const REQUEST_STATUSES = {
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+  ISSUED: "ISSUED",
+  RETURNED: "RETURNED",
+  COMPLETED: "COMPLETED",
+  REJECTED: "REJECTED",
+} as const;
+
+export type RequestStatus = (typeof REQUEST_STATUSES)[keyof typeof REQUEST_STATUSES];
+
+export interface InventoryRequestItem {
+  itemId: string;
+  itemName: string;
+  requestedQuantity: number;
+  approvedQuantity: number;
+  issuedQuantity: number;
+  returnedQuantity: number;
+  damagedQuantity: number;
+  missingQuantity: number;
+}
+
+export interface InventoryRequest extends Timestamps {
+  id: string;
+  societyId: string;
+  houseId: string;
+  houseNumber: string;
+  memberId: string;
+  memberName: string;
+  purpose: string;
+  requestDate: string;
+  expectedReturnDate: string;
+  notes: string;
+  status: RequestStatus;
+  items: InventoryRequestItem[];
+  rejectionReason?: string;
+  approvedAt?: string;
+  issuedAt?: string;
+  returnedAt?: string;
+}
+
+export const TRANSACTION_TYPES = {
+  ADDED: "ADDED",
+  ADJUSTED: "ADJUSTED",
+  ISSUED: "ISSUED",
+  RETURNED: "RETURNED",
+  DAMAGED: "DAMAGED",
+  MISSING: "MISSING",
+} as const;
+
+export type TransactionType = (typeof TRANSACTION_TYPES)[keyof typeof TRANSACTION_TYPES];
+
+export interface InventoryTransaction {
+  id: string;
+  itemId: string;
+  itemName: string;
+  type: TransactionType;
+  quantity: number;
+  requestId?: string;
+  houseNumber?: string;
+  memberId?: string;
+  note: string;
+  createdAt: string;
+}
+
+export interface InventoryStats {
+  totalItems: number;
+  totalQuantity: number;
+  available: number;
+  issued: number;
+  damaged: number;
+  missing: number;
+}
