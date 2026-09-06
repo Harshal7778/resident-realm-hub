@@ -45,10 +45,9 @@ function InventoryRequestsPage() {
 
   const load = useCallback(async () => {
     const [nextRequests, nextItems] = await Promise.all([
-      inventoryService.listRequests({
-        status,
-        memberId: canManage ? undefined : user?.memberId,
-      }),
+      inventoryService.listRequests(
+        canManage || !user ? { status } : { status, memberId: user.memberId },
+      ),
       inventoryService.listItems(),
     ]);
     setRequests(nextRequests);
