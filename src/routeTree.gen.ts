@@ -41,6 +41,7 @@ import { Route as MembersIndexRouteImport } from './routes/members.index'
 import { Route as MembersIdRouteImport } from './routes/members.$id'
 import { Route as EventsIdExpensesRouteImport } from './routes/events.$id_.expenses'
 import { Route as InventoryRequestsIndexRouteImport } from './routes/inventory.requests.index'
+import { Route as InventoryRequestsRequestIdRouteImport } from './routes/inventory.requests.$requestId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -202,6 +203,12 @@ const InventoryRequestsIndexRoute = InventoryRequestsIndexRouteImport.update({
   path: '/requests/',
   getParentRoute: () => InventoryRoute,
 } as any)
+const InventoryRequestsRequestIdRoute =
+  InventoryRequestsRequestIdRouteImport.update({
+    id: '/requests/$requestId',
+    path: '/requests/$requestId',
+    getParentRoute: () => InventoryRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -235,6 +242,7 @@ export interface FileRoutesByFullPath {
   '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
+  '/inventory/requests/$requestId': typeof InventoryRequestsRequestIdRoute
   '/inventory/requests/': typeof InventoryRequestsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -265,6 +273,7 @@ export interface FileRoutesByTo {
   '/meetings': typeof MeetingsIndexRoute
   '/members': typeof MembersIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
+  '/inventory/requests/$requestId': typeof InventoryRequestsRequestIdRoute
   '/inventory/requests': typeof InventoryRequestsIndexRoute
 }
 export interface FileRoutesById {
@@ -300,6 +309,7 @@ export interface FileRoutesById {
   '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
   '/events/$id_/expenses': typeof EventsIdExpensesRoute
+  '/inventory/requests/$requestId': typeof InventoryRequestsRequestIdRoute
   '/inventory/requests/': typeof InventoryRequestsIndexRoute
 }
 export interface FileRouteTypes {
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/meetings/'
     | '/members/'
     | '/events/$id/expenses'
+    | '/inventory/requests/$requestId'
     | '/inventory/requests/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -366,6 +377,7 @@ export interface FileRouteTypes {
     | '/meetings'
     | '/members'
     | '/events/$id/expenses'
+    | '/inventory/requests/$requestId'
     | '/inventory/requests'
   id:
     | '__root__'
@@ -400,6 +412,7 @@ export interface FileRouteTypes {
     | '/meetings/'
     | '/members/'
     | '/events/$id_/expenses'
+    | '/inventory/requests/$requestId'
     | '/inventory/requests/'
   fileRoutesById: FileRoutesById
 }
@@ -654,6 +667,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryRequestsIndexRouteImport
       parentRoute: typeof InventoryRoute
     }
+    '/inventory/requests/$requestId': {
+      id: '/inventory/requests/$requestId'
+      path: '/requests/$requestId'
+      fullPath: '/inventory/requests/$requestId'
+      preLoaderRoute: typeof InventoryRequestsRequestIdRouteImport
+      parentRoute: typeof InventoryRoute
+    }
   }
 }
 
@@ -675,12 +695,14 @@ const EventsRouteWithChildren =
 interface InventoryRouteChildren {
   InventoryIdRoute: typeof InventoryIdRoute
   InventoryIndexRoute: typeof InventoryIndexRoute
+  InventoryRequestsRequestIdRoute: typeof InventoryRequestsRequestIdRoute
   InventoryRequestsIndexRoute: typeof InventoryRequestsIndexRoute
 }
 
 const InventoryRouteChildren: InventoryRouteChildren = {
   InventoryIdRoute: InventoryIdRoute,
   InventoryIndexRoute: InventoryIndexRoute,
+  InventoryRequestsRequestIdRoute: InventoryRequestsRequestIdRoute,
   InventoryRequestsIndexRoute: InventoryRequestsIndexRoute,
 }
 
