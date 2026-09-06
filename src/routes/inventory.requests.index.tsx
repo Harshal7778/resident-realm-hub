@@ -18,6 +18,7 @@ import {
   REQUEST_STATUSES,
   type InventoryItem,
   type InventoryRequest,
+  type RequestStatus,
 } from "@/types/domain";
 
 export const Route = createFileRoute("/inventory/requests/")({
@@ -40,7 +41,7 @@ function InventoryRequestsPage() {
 
   const [requests, setRequests] = useState<InventoryRequest[] | null>(null);
   const [items, setItems] = useState<InventoryItem[]>([]);
-  const [status, setStatus] = useState("ALL");
+  const [status, setStatus] = useState<"ALL" | RequestStatus>("ALL");
 
   const load = useCallback(async () => {
     const [nextRequests, nextItems] = await Promise.all([
@@ -98,8 +99,8 @@ function InventoryRequestsPage() {
 
         <FilterChips
           value={status}
-          onChange={setStatus}
-          options={[{ value: "ALL", label: "All" }, ...REQUEST_STATUSES.map((s) => ({ value: s, label: s }))]}
+          onChange={(v) => setStatus(v as "ALL" | RequestStatus)}
+          options={[{ value: "ALL", label: "All" }, ...Object.values(REQUEST_STATUSES).map((s) => ({ value: s, label: s }))]}
         />
 
         {requests === null ? (

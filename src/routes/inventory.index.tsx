@@ -75,7 +75,7 @@ function InventoryIndexPage() {
     >
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
-          <StatCard label="Total items" value={stats ? String(stats.totalItems) : "—"} icon={Package} hint={stats ? `${stats.totalQuantity} pieces` : undefined} />
+          <StatCard label="Total items" value={stats ? String(stats.totalItems) : "—"} icon={Package} hint={`${stats?.totalQuantity ?? 0} pieces`} />
           <StatCard label="Available" value={stats ? String(stats.available) : "—"} tone="positive" />
           <StatCard label="Issued" value={stats ? String(stats.issued) : "—"} tone="warning" />
           <StatCard
