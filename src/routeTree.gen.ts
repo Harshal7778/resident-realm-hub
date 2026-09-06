@@ -33,6 +33,7 @@ import { Route as AdminRolesRouteImport } from './routes/admin.roles'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsIdRouteImport } from './routes/events.$id'
+import { Route as InventoryIndexRouteImport } from './routes/inventory.index'
 import { Route as MeetingsIndexRouteImport } from './routes/meetings.index'
 import { Route as MeetingsIdRouteImport } from './routes/meetings.$id'
 import { Route as MembersIndexRouteImport } from './routes/members.index'
@@ -159,6 +160,11 @@ const EventsIdRoute = EventsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => EventsRoute,
 } as any)
+const InventoryIndexRoute = InventoryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => InventoryRoute,
+} as any)
 const MeetingsIndexRoute = MeetingsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -192,7 +198,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/events': typeof EventsRouteWithChildren
   '/finance': typeof FinanceRoute
-  '/inventory': typeof InventoryRoute
+  '/inventory': typeof InventoryRouteWithChildren
   '/login': typeof LoginRoute
   '/meetings': typeof MeetingsRouteWithChildren
   '/members': typeof MembersRouteWithChildren
@@ -212,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
   '/events/': typeof EventsIndexRoute
+  '/inventory/': typeof InventoryIndexRoute
   '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
@@ -222,7 +229,6 @@ export interface FileRoutesByTo {
   '/coming-soon': typeof ComingSoonRoute
   '/dashboard': typeof DashboardRoute
   '/finance': typeof FinanceRoute
-  '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
   '/more': typeof MoreRoute
   '/notices': typeof NoticesRoute
@@ -240,6 +246,7 @@ export interface FileRoutesByTo {
   '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
   '/events': typeof EventsIndexRoute
+  '/inventory': typeof InventoryIndexRoute
   '/meetings': typeof MeetingsIndexRoute
   '/members': typeof MembersIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
@@ -252,7 +259,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/events': typeof EventsRouteWithChildren
   '/finance': typeof FinanceRoute
-  '/inventory': typeof InventoryRoute
+  '/inventory': typeof InventoryRouteWithChildren
   '/login': typeof LoginRoute
   '/meetings': typeof MeetingsRouteWithChildren
   '/members': typeof MembersRouteWithChildren
@@ -272,6 +279,7 @@ export interface FileRoutesById {
   '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
   '/events/': typeof EventsIndexRoute
+  '/inventory/': typeof InventoryIndexRoute
   '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
   '/events/$id_/expenses': typeof EventsIdExpensesRoute
@@ -305,6 +313,7 @@ export interface FileRouteTypes {
     | '/meetings/$id'
     | '/members/$id'
     | '/events/'
+    | '/inventory/'
     | '/meetings/'
     | '/members/'
     | '/events/$id/expenses'
@@ -315,7 +324,6 @@ export interface FileRouteTypes {
     | '/coming-soon'
     | '/dashboard'
     | '/finance'
-    | '/inventory'
     | '/login'
     | '/more'
     | '/notices'
@@ -333,6 +341,7 @@ export interface FileRouteTypes {
     | '/meetings/$id'
     | '/members/$id'
     | '/events'
+    | '/inventory'
     | '/meetings'
     | '/members'
     | '/events/$id/expenses'
@@ -364,6 +373,7 @@ export interface FileRouteTypes {
     | '/meetings/$id'
     | '/members/$id'
     | '/events/'
+    | '/inventory/'
     | '/meetings/'
     | '/members/'
     | '/events/$id_/expenses'
@@ -376,7 +386,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   EventsRoute: typeof EventsRouteWithChildren
   FinanceRoute: typeof FinanceRoute
-  InventoryRoute: typeof InventoryRoute
+  InventoryRoute: typeof InventoryRouteWithChildren
   LoginRoute: typeof LoginRoute
   MeetingsRoute: typeof MeetingsRouteWithChildren
   MembersRoute: typeof MembersRouteWithChildren
@@ -564,6 +574,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsIdRouteImport
       parentRoute: typeof EventsRoute
     }
+    '/inventory/': {
+      id: '/inventory/'
+      path: '/'
+      fullPath: '/inventory/'
+      preLoaderRoute: typeof InventoryIndexRouteImport
+      parentRoute: typeof InventoryRoute
+    }
     '/meetings/': {
       id: '/meetings/'
       path: '/'
@@ -617,6 +634,18 @@ const EventsRouteChildren: EventsRouteChildren = {
 const EventsRouteWithChildren =
   EventsRoute._addFileChildren(EventsRouteChildren)
 
+interface InventoryRouteChildren {
+  InventoryIndexRoute: typeof InventoryIndexRoute
+}
+
+const InventoryRouteChildren: InventoryRouteChildren = {
+  InventoryIndexRoute: InventoryIndexRoute,
+}
+
+const InventoryRouteWithChildren = InventoryRoute._addFileChildren(
+  InventoryRouteChildren,
+)
+
 interface MeetingsRouteChildren {
   MeetingsIdRoute: typeof MeetingsIdRoute
   MeetingsIndexRoute: typeof MeetingsIndexRoute
@@ -651,7 +680,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   EventsRoute: EventsRouteWithChildren,
   FinanceRoute: FinanceRoute,
-  InventoryRoute: InventoryRoute,
+  InventoryRoute: InventoryRouteWithChildren,
   LoginRoute: LoginRoute,
   MeetingsRoute: MeetingsRouteWithChildren,
   MembersRoute: MembersRouteWithChildren,
