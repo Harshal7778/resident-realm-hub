@@ -28,6 +28,24 @@ export const PERMISSIONS = {
   RECORD_PAYMENT: "RECORD_PAYMENT",
   CLOSE_EVENT: "CLOSE_EVENT",
   UNLOCK_EVENT: "UNLOCK_EVENT",
+  EVENT_VIEW: "EVENT_VIEW",
+  EVENT_MANAGE: "EVENT_MANAGE",
+  CONTRIBUTION_VIEW: "CONTRIBUTION_VIEW",
+  CONTRIBUTION_MANAGE: "CONTRIBUTION_MANAGE",
+  PAYMENT_RECORD: "PAYMENT_RECORD",
+  EXPENSE_VIEW: "EXPENSE_VIEW",
+  EXPENSE_MANAGE: "EXPENSE_MANAGE",
+  MEETING_MANAGE: "MEETING_MANAGE",
+  ATTENDANCE_MANAGE: "ATTENDANCE_MANAGE",
+  NOTICE_MANAGE: "NOTICE_MANAGE",
+  INVENTORY_VIEW: "INVENTORY_VIEW",
+  INVENTORY_MANAGE: "INVENTORY_MANAGE",
+  INVENTORY_APPROVE: "INVENTORY_APPROVE",
+  REPORT_VIEW: "REPORT_VIEW",
+  ROLE_MANAGE: "ROLE_MANAGE",
+  PERMISSION_MANAGE: "PERMISSION_MANAGE",
+  EVENT_UNLOCK: "EVENT_UNLOCK",
+  AUDIT_VIEW: "AUDIT_VIEW",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -359,4 +377,18 @@ export interface InventoryStats {
   issued: number;
   damaged: number;
   missing: number;
+}
+
+export interface AuditLog {
+  id: string;
+  userId: string;
+  userName: string;
+  userRole: Role;
+  action: string;
+  entity: string;
+  entityId: string;
+  timestamp: string;
+  oldValue: string;
+  newValue: string;
+  reason: string;
 }

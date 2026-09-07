@@ -9,12 +9,13 @@ import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { MobileShell } from "@/components/layout/MobileShell";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import type { Role } from "@/types/domain";
+import type { Permission, Role } from "@/types/domain";
 
 interface ProtectedPageProps {
   title: string;
   subtitle?: string;
   roles?: Role[];
+  permission?: Permission;
   showBack?: boolean;
   headerAction?: ReactNode;
   hideBottomNav?: boolean;
@@ -25,12 +26,13 @@ export function ProtectedPage({
   title,
   subtitle,
   roles,
+  permission,
   showBack,
   headerAction,
   hideBottomNav,
   children,
 }: ProtectedPageProps) {
-  const { user, isReady, isAuthenticated } = useAuth();
+  const { user, isReady, isAuthenticated, can } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,11 +50,18 @@ export function ProtectedPage({
     );
   }
 
-  const allowed = !roles || roles.includes(user.role);
+  const roleAllowed = !roles || roles.includes(user.role);
+  const permissionAllowed = !permission || can(permission);
+  const allowed = roleAllowed && permissionAllowed;
 
   return (
     <MobileShell>
-      <AppHeader title={title} subtitle={subtitle} showBack={showBack} action={headerAction} />
+      <AppHeader
+        title={allowed ? title : "Restricted"}
+        subtitle={allowed ? subtitle : undefined}
+        showBack={showBack}
+        action={allowed ? headerAction : undefined}
+      />
       <main className="flex-1 px-4 py-4 pb-6">
         {allowed ? (
           children
@@ -60,7 +69,7 @@ export function ProtectedPage({
           <EmptyState
             icon={ShieldAlert}
             title="You don't have access"
-            description="This section is restricted to society committee roles."
+            description="Your current role does not have permission to open this section. Please contact the society admin."
             action={
               <Button className="mt-2 h-11" onClick={() => navigate({ to: "/dashboard" })}>
                 Back to home
