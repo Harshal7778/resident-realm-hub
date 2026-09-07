@@ -17,6 +17,8 @@ export const STORAGE_KEYS = {
   inventoryItems: "sm.inventoryItems",
   inventoryRequests: "sm.inventoryRequests",
   inventoryTransactions: "sm.inventoryTransactions",
+  rolePermissions: "sm.rolePermissions",
+  auditLogs: "sm.auditLogs",
 } as const;
 
 const isBrowser = () => typeof window !== "undefined" && !!window.localStorage;
