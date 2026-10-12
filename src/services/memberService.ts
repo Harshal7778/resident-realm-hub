@@ -1,5 +1,6 @@
 import { SEED_VERSION, SOCIETY_ID, buildSeedHouses, buildSeedMembers, demoSociety } from "@/data/seed";
 import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
+import { auditService } from "@/services/auditService";
 import type { House, Member, MobileNumber, Role, ServiceResult, Society } from "@/types/domain";
 
 const delay = (ms = 220) => new Promise((r) => setTimeout(r, ms));
@@ -166,8 +167,19 @@ export const memberService = {
     const houseNumber = input.houseNumber.trim();
     if (!name) return { ok: false, error: "Enter the member name." };
     if (!houseNumber) return { ok: false, error: "Enter a house number." };
+    const existing = members().find((m) => m.id === id);
     const house = ensureHouse(houseNumber, name);
     const updated = updateMember(id, (m) => ({ ...m, name, role: input.role, houseId: house.id }));
+    if (existing && updated && existing.role !== updated.role) {
+      auditService.log({
+        action: "Role changed",
+        entity: updated.name,
+        entityId: houseNumberFor(updated),
+        oldValue: existing.role,
+        newValue: updated.role,
+        reason: "Updated member details",
+      });
+    }
     return updated ? { ok: true, data: updated } : { ok: false, error: "Member not found." };
   },
 
@@ -222,7 +234,22 @@ export const memberService = {
   /** Soft update only — records are never permanently deleted. */
   async setMemberActive(id: string, isActive: boolean): Promise<ServiceResult<Member>> {
     await delay(160);
+    const existing = members().find((m) => m.id === id);
     const updated = updateMember(id, (m) => ({ ...m, isActive }));
+    if (existing && updated && existing.isActive !== updated.isActive) {
+      auditService.log({
+        action: isActive ? "Member reactivated" : "Member deactivated",
+        entity: updated.name,
+        entityId: houseNumberFor(updated),
+        oldValue: isActive ? "Inactive" : "Active",
+        newValue: isActive ? "Active" : "Inactive",
+        reason: isActive ? "Reactivated by Admin" : "Deactivated by Admin",
+      });
+    }
     return updated ? { ok: true, data: updated } : { ok: false, error: "Member not found." };
   },
 };
+
+function houseNumberFor(member: Member): string {
+  return houses().find((house) => house.id === member.houseId)?.houseNumber ?? "—";
+}

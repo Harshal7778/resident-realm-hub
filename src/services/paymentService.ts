@@ -1,4 +1,5 @@
 import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
+import { auditService } from "@/services/auditService";
 import { readContributions, saveContributions, statusFor } from "@/services/contributionService";
 import { eventService } from "@/services/eventService";
 import { ensureSeeded } from "@/services/memberService";
@@ -96,6 +97,14 @@ export const paymentService = {
         updatedAt: now(),
       },
     ]);
+    auditService.log({
+      action: "Payment recorded",
+      entity: `${event.name} · ${contribution.houseNumber}`,
+      entityId: contribution.id,
+      oldValue: `${contribution.status} · ₹${contribution.regularPaid.toLocaleString("en-IN")} regular paid`,
+      newValue: `${input.type} · ₹${amount.toLocaleString("en-IN")} recorded; ${updated.status}`,
+      reason: input.note?.trim() || "Payment entry",
+    });
 
     await notificationService.notify({
       type: NOTIFICATION_TYPES.PAYMENT_RECORDED,

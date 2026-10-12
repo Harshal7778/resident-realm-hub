@@ -1,5 +1,6 @@
 import { SOCIETY_ID, buildSeedEvents } from "@/data/seed";
 import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
+import { auditService } from "@/services/auditService";
 import {
   buildContributionsForEvent,
   readContributions,
@@ -136,6 +137,14 @@ export const eventService = {
       updatedAt: now(),
     };
     saveEvents(readEvents().map((e) => (e.id === id ? updated : e)));
+    auditService.log({
+      action: "Event closed",
+      entity: event.name,
+      entityId: event.id,
+      oldValue: "Active",
+      newValue: "Closed",
+      reason: "Closed by Admin",
+    });
     return { ok: true, data: updated };
   },
 
@@ -156,6 +165,14 @@ export const eventService = {
       updatedAt: now(),
     };
     saveEvents(readEvents().map((e) => (e.id === id ? updated : e)));
+    auditService.log({
+      action: "Event unlocked",
+      entity: event.name,
+      entityId: event.id,
+      oldValue: "Closed",
+      newValue: "Active",
+      reason: value,
+    });
     return { ok: true, data: updated };
   },
 };

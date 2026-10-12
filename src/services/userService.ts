@@ -66,6 +66,9 @@ export const userService = {
 
     const previous = member.role;
     const members = readItem<Member[]>(STORAGE_KEYS.members) ?? [];
+    if (previous === ROLES.ADMIN && role !== ROLES.ADMIN && members.filter((m) => m.isActive && m.role === ROLES.ADMIN).length <= 1) {
+      return { ok: false, error: "At least one active Admin must remain." };
+    }
     const next = members.map((m) =>
       m.id === id ? { ...m, role, updatedAt: new Date().toISOString() } : m,
     );
@@ -93,16 +96,14 @@ export const userService = {
   },
 
   async setActive(id: string, isActive: boolean, reason = ""): Promise<ServiceResult<AppUser>> {
+    const member = await memberService.getMemberById(id);
+    if (!member) return { ok: false, error: "User not found." };
+    const members = readItem<Member[]>(STORAGE_KEYS.members) ?? [];
+    if (!isActive && member.role === ROLES.ADMIN && members.filter((m) => m.isActive && m.role === ROLES.ADMIN).length <= 1) {
+      return { ok: false, error: "At least one active Admin must remain." };
+    }
     const res = await memberService.setMemberActive(id, isActive);
     if (!res.ok || !res.data) return { ok: false, error: res.error ?? "Could not update user." };
-    auditService.log({
-      action: isActive ? "Member reactivated" : "Member deactivated",
-      entity: res.data.name,
-      entityId: memberService.houseNumberFor(res.data),
-      oldValue: isActive ? "Inactive" : "Active",
-      newValue: isActive ? "Active" : "Inactive",
-      reason,
-    });
     if (typeof window !== "undefined") window.dispatchEvent(new Event(USERS_EVENT));
     return { ok: true, data: toUser(res.data) };
   },
