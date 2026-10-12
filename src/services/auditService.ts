@@ -68,6 +68,16 @@ export const auditService = {
     return logs;
   },
 
+  subscribe(listener: () => void): () => void {
+    if (typeof window === "undefined") return () => {};
+    window.addEventListener(AUDIT_EVENT, listener);
+    window.addEventListener("storage", listener);
+    return () => {
+      window.removeEventListener(AUDIT_EVENT, listener);
+      window.removeEventListener("storage", listener);
+    };
+  },
+
   /** Distinct actors and actions, for the audit filters. */
   async facets(): Promise<{ users: { id: string; name: string }[]; actions: string[] }> {
     const logs = readLogs();

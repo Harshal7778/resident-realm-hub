@@ -1,4 +1,5 @@
 import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
+import { auditService } from "@/services/auditService";
 import { eventService } from "@/services/eventService";
 import { ensureSeeded } from "@/services/memberService";
 import {
@@ -83,6 +84,14 @@ export const expenseService = {
       updatedAt: now(),
     };
     saveExpenses([...readExpenses(), expense]);
+    auditService.log({
+      action: "Expense added",
+      entity: `${event.name} · ${expense.description}`,
+      entityId: expense.id,
+      oldValue: "No expense",
+      newValue: `${expense.category} · ₹${expense.amount.toLocaleString("en-IN")}`,
+      reason: expense.notes || "Expense entry",
+    });
     return { ok: true, data: expense };
   },
 
@@ -111,6 +120,14 @@ export const expenseService = {
       updatedAt: now(),
     };
     saveExpenses(readExpenses().map((e) => (e.id === id ? updated : e)));
+    auditService.log({
+      action: "Expense updated",
+      entity: `${event.name} · ${updated.description}`,
+      entityId: updated.id,
+      oldValue: `${existing.category} · ₹${existing.amount.toLocaleString("en-IN")}`,
+      newValue: `${updated.category} · ₹${updated.amount.toLocaleString("en-IN")}`,
+      reason: updated.notes || "Expense updated",
+    });
     return { ok: true, data: updated };
   },
 
@@ -123,6 +140,14 @@ export const expenseService = {
       return { ok: false, error: "This event is closed. Unlock it to remove expenses." };
     }
     saveExpenses(readExpenses().filter((e) => e.id !== id));
+    auditService.log({
+      action: "Expense removed",
+      entity: `${event?.name ?? "Event"} · ${existing.description}`,
+      entityId: existing.id,
+      oldValue: `${existing.category} · ₹${existing.amount.toLocaleString("en-IN")}`,
+      newValue: "Removed",
+      reason: "Expense removed",
+    });
     return { ok: true, data: id };
   },
 };

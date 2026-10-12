@@ -1,6 +1,7 @@
 import { SOCIETY_ID } from "@/data/seed";
 import { buildSeedInventory } from "@/data/inventorySeed";
 import { STORAGE_KEYS, readItem, writeItem } from "@/lib/storage";
+import { auditService } from "@/services/auditService";
 import { ensureSeeded } from "@/services/memberService";
 import { notificationService } from "@/services/notificationService";
 import {
@@ -309,6 +310,14 @@ export const inventoryService = {
       })),
     };
     saveRequests(readRequests().map((r) => (r.id === id ? updated : r)));
+    auditService.log({
+      action: "Inventory request approved",
+      entity: `${updated.purpose} · ${updated.houseNumber}`,
+      entityId: updated.id,
+      oldValue: "Pending",
+      newValue: `Approved · ${approvedTotal} item(s)`,
+      reason: "Request approved",
+    });
     await notificationService.notify({
       type: NOTIFICATION_TYPES.INVENTORY_APPROVED,
       title: "Inventory request approved",
@@ -334,6 +343,14 @@ export const inventoryService = {
       updatedAt: now(),
     };
     saveRequests(readRequests().map((r) => (r.id === id ? updated : r)));
+    auditService.log({
+      action: "Inventory request rejected",
+      entity: `${updated.purpose} · ${updated.houseNumber}`,
+      entityId: updated.id,
+      oldValue: "Pending",
+      newValue: "Rejected",
+      reason: reason.trim(),
+    });
     await notificationService.notify({
       type: NOTIFICATION_TYPES.INVENTORY_APPROVED,
       title: "Inventory request rejected",
@@ -396,6 +413,14 @@ export const inventoryService = {
       items: request.items.map((line) => ({ ...line, issuedQuantity: line.approvedQuantity })),
     };
     saveRequests(readRequests().map((r) => (r.id === id ? updated : r)));
+    auditService.log({
+      action: "Inventory issued",
+      entity: `${updated.purpose} · ${updated.houseNumber}`,
+      entityId: updated.id,
+      oldValue: "Approved",
+      newValue: `Issued · ${updated.items.reduce((sum, line) => sum + line.issuedQuantity, 0)} item(s)`,
+      reason: "Items issued",
+    });
     await notificationService.notify({
       type: NOTIFICATION_TYPES.INVENTORY_ISSUED,
       title: "Inventory issued",
@@ -487,6 +512,14 @@ export const inventoryService = {
       }),
     };
     saveRequests(readRequests().map((r) => (r.id === id ? updated : r)));
+    auditService.log({
+      action: "Inventory return recorded",
+      entity: `${updated.purpose} · ${updated.houseNumber}`,
+      entityId: updated.id,
+      oldValue: "Issued",
+      newValue: `Returned ${updated.items.reduce((sum, line) => sum + line.returnedQuantity, 0)} · Damaged ${updated.items.reduce((sum, line) => sum + line.damagedQuantity, 0)} · Missing ${updated.items.reduce((sum, line) => sum + line.missingQuantity, 0)}`,
+      reason: "Inventory return recorded",
+    });
     return { ok: true, data: updated };
   },
 };
