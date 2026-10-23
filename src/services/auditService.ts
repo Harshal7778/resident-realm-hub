@@ -92,10 +92,4 @@ export const auditService = {
       actions: [...actions].sort(),
     };
   },
-
-  subscribe(listener: () => void): () => void {
-    if (typeof window === "undefined") return () => {};
-    window.addEventListener(AUDIT_EVENT, listener);
-    return () => window.removeEventListener(AUDIT_EVENT, listener);
-  },
 };
