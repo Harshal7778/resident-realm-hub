@@ -28,7 +28,7 @@ export const Route = createFileRoute("/admin/permissions")({
   component: PermissionsPage,
 });
 
-const TAB_ROLES: Role[] = ["SECRETARY", "TREASURER"];
+const TAB_ROLES = ["SECRETARY", "TREASURER"] as const;
 
 function PermissionsPage() {
   const [effective, setEffective] = useState<Record<Role, Permission[]>>(() =>
