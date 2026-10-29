@@ -1,3 +1,3 @@
-- [ ] Complete functional admin users, roles, permissions and audit screens.
-- [ ] Record audit entries for payment, expense, event lock/unlock and inventory lifecycle changes.
-- [ ] Verify role permission changes take effect immediately and persist with audit history.
+- [x] Complete functional admin users, roles, permissions and audit screens.
+- [x] Record audit entries for payment, expense, event lock/unlock and inventory lifecycle changes.
+- [x] Verify role permission changes take effect immediately and persist with audit history.
