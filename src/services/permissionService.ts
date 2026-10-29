@@ -65,7 +65,7 @@ export const permissionService = {
       entity: `${ROLE_LABEL[role]} role`,
       entityId: role,
       oldValue: `${permissionLabel(canonical)}: ${was ? "ON" : "OFF"}`,
-      newValue: `${permissionLabel(canonical)}: ${enabled ? "ON" : "OFF"}`,
+      newValue: `${enabled ? "ON" : "OFF"}`,
       reason: `Changed ${ROLE_LABEL[role]} permissions`,
     });
     return { ok: true };
