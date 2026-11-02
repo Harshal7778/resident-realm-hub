@@ -39,6 +39,8 @@ import { Route as MeetingsIndexRouteImport } from './routes/meetings.index'
 import { Route as MeetingsIdRouteImport } from './routes/meetings.$id'
 import { Route as MembersIndexRouteImport } from './routes/members.index'
 import { Route as MembersIdRouteImport } from './routes/members.$id'
+import { Route as ReportsIndexRouteImport } from './routes/reports.index'
+import { Route as ReportsReportRouteImport } from './routes/reports.$report'
 import { Route as EventsIdExpensesRouteImport } from './routes/events.$id_.expenses'
 import { Route as InventoryRequestsIndexRouteImport } from './routes/inventory.requests.index'
 import { Route as InventoryRequestsRequestIdRouteImport } from './routes/inventory.requests.$requestId'
@@ -193,6 +195,16 @@ const MembersIdRoute = MembersIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => MembersRoute,
 } as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ReportsRoute,
+} as any)
+const ReportsReportRoute = ReportsReportRouteImport.update({
+  id: '/$report',
+  path: '/$report',
+  getParentRoute: () => ReportsRoute,
+} as any)
 const EventsIdExpensesRoute = EventsIdExpensesRouteImport.update({
   id: '/$id_/expenses',
   path: '/$id/expenses',
@@ -227,7 +239,7 @@ export interface FileRoutesByFullPath {
   '/otp': typeof OtpRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/reports': typeof ReportsRoute
+  '/reports': typeof ReportsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/permissions': typeof AdminPermissionsRoute
@@ -237,10 +249,12 @@ export interface FileRoutesByFullPath {
   '/inventory/$id': typeof InventoryIdRoute
   '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
+  '/reports/$report': typeof ReportsReportRoute
   '/events/': typeof EventsIndexRoute
   '/inventory/': typeof InventoryIndexRoute
   '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
+  '/reports/': typeof ReportsIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
   '/inventory/requests/$requestId': typeof InventoryRequestsRequestIdRoute
   '/inventory/requests/': typeof InventoryRequestsIndexRoute
@@ -258,7 +272,6 @@ export interface FileRoutesByTo {
   '/otp': typeof OtpRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/permissions': typeof AdminPermissionsRoute
@@ -268,10 +281,12 @@ export interface FileRoutesByTo {
   '/inventory/$id': typeof InventoryIdRoute
   '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
+  '/reports/$report': typeof ReportsReportRoute
   '/events': typeof EventsIndexRoute
   '/inventory': typeof InventoryIndexRoute
   '/meetings': typeof MeetingsIndexRoute
   '/members': typeof MembersIndexRoute
+  '/reports': typeof ReportsIndexRoute
   '/events/$id/expenses': typeof EventsIdExpensesRoute
   '/inventory/requests/$requestId': typeof InventoryRequestsRequestIdRoute
   '/inventory/requests': typeof InventoryRequestsIndexRoute
@@ -294,7 +309,7 @@ export interface FileRoutesById {
   '/otp': typeof OtpRoute
   '/payments': typeof PaymentsRoute
   '/profile': typeof ProfileRoute
-  '/reports': typeof ReportsRoute
+  '/reports': typeof ReportsRouteWithChildren
   '/settings': typeof SettingsRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/permissions': typeof AdminPermissionsRoute
@@ -304,10 +319,12 @@ export interface FileRoutesById {
   '/inventory/$id': typeof InventoryIdRoute
   '/meetings/$id': typeof MeetingsIdRoute
   '/members/$id': typeof MembersIdRoute
+  '/reports/$report': typeof ReportsReportRoute
   '/events/': typeof EventsIndexRoute
   '/inventory/': typeof InventoryIndexRoute
   '/meetings/': typeof MeetingsIndexRoute
   '/members/': typeof MembersIndexRoute
+  '/reports/': typeof ReportsIndexRoute
   '/events/$id_/expenses': typeof EventsIdExpensesRoute
   '/inventory/requests/$requestId': typeof InventoryRequestsRequestIdRoute
   '/inventory/requests/': typeof InventoryRequestsIndexRoute
@@ -341,10 +358,12 @@ export interface FileRouteTypes {
     | '/inventory/$id'
     | '/meetings/$id'
     | '/members/$id'
+    | '/reports/$report'
     | '/events/'
     | '/inventory/'
     | '/meetings/'
     | '/members/'
+    | '/reports/'
     | '/events/$id/expenses'
     | '/inventory/requests/$requestId'
     | '/inventory/requests/'
@@ -362,7 +381,6 @@ export interface FileRouteTypes {
     | '/otp'
     | '/payments'
     | '/profile'
-    | '/reports'
     | '/settings'
     | '/admin/audit'
     | '/admin/permissions'
@@ -372,10 +390,12 @@ export interface FileRouteTypes {
     | '/inventory/$id'
     | '/meetings/$id'
     | '/members/$id'
+    | '/reports/$report'
     | '/events'
     | '/inventory'
     | '/meetings'
     | '/members'
+    | '/reports'
     | '/events/$id/expenses'
     | '/inventory/requests/$requestId'
     | '/inventory/requests'
@@ -407,10 +427,12 @@ export interface FileRouteTypes {
     | '/inventory/$id'
     | '/meetings/$id'
     | '/members/$id'
+    | '/reports/$report'
     | '/events/'
     | '/inventory/'
     | '/meetings/'
     | '/members/'
+    | '/reports/'
     | '/events/$id_/expenses'
     | '/inventory/requests/$requestId'
     | '/inventory/requests/'
@@ -433,7 +455,7 @@ export interface RootRouteChildren {
   OtpRoute: typeof OtpRoute
   PaymentsRoute: typeof PaymentsRoute
   ProfileRoute: typeof ProfileRoute
-  ReportsRoute: typeof ReportsRoute
+  ReportsRoute: typeof ReportsRouteWithChildren
   SettingsRoute: typeof SettingsRoute
   AdminAuditRoute: typeof AdminAuditRoute
   AdminPermissionsRoute: typeof AdminPermissionsRoute
@@ -653,6 +675,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MembersIdRouteImport
       parentRoute: typeof MembersRoute
     }
+    '/reports/': {
+      id: '/reports/'
+      path: '/'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
+      parentRoute: typeof ReportsRoute
+    }
+    '/reports/$report': {
+      id: '/reports/$report'
+      path: '/$report'
+      fullPath: '/reports/$report'
+      preLoaderRoute: typeof ReportsReportRouteImport
+      parentRoute: typeof ReportsRoute
+    }
     '/events/$id_/expenses': {
       id: '/events/$id_/expenses'
       path: '/$id/expenses'
@@ -737,6 +773,19 @@ const MembersRouteChildren: MembersRouteChildren = {
 const MembersRouteWithChildren =
   MembersRoute._addFileChildren(MembersRouteChildren)
 
+interface ReportsRouteChildren {
+  ReportsReportRoute: typeof ReportsReportRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
+}
+
+const ReportsRouteChildren: ReportsRouteChildren = {
+  ReportsReportRoute: ReportsReportRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
+}
+
+const ReportsRouteWithChildren =
+  ReportsRoute._addFileChildren(ReportsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AttendanceRoute: AttendanceRoute,
@@ -754,7 +803,7 @@ const rootRouteChildren: RootRouteChildren = {
   OtpRoute: OtpRoute,
   PaymentsRoute: PaymentsRoute,
   ProfileRoute: ProfileRoute,
-  ReportsRoute: ReportsRoute,
+  ReportsRoute: ReportsRouteWithChildren,
   SettingsRoute: SettingsRoute,
   AdminAuditRoute: AdminAuditRoute,
   AdminPermissionsRoute: AdminPermissionsRoute,
