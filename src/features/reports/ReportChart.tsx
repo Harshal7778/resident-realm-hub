@@ -10,6 +10,7 @@ export interface ReportChartDatum {
 export function ReportChart({
   data,
   ariaLabel,
+  formatValue,
 }: {
   data: ReportChartDatum[];
   ariaLabel: string;
