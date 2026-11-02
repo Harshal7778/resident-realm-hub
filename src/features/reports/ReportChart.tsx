@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { formatINR } from "@/lib/format";
 
 export interface ReportChartDatum {
   label: string;
@@ -7,54 +6,37 @@ export interface ReportChartDatum {
   color: string;
 }
 
-/** Single simple bar chart used across reports. Renders only in the browser. */
+/** Simple dependency-free horizontal bar chart used by the reports. */
 export function ReportChart({
   data,
   ariaLabel,
-  formatValue,
 }: {
   data: ReportChartDatum[];
   ariaLabel: string;
   formatValue?: (value: number) => string;
 }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return <div className="h-44 rounded-xl bg-muted/50" aria-hidden="true" />;
-  }
+  const format = formatValue ?? formatINR;
+  const max = Math.max(...data.map((d) => d.value), 1);
 
   return (
-    <div className="h-44 w-full" role="img" aria-label={ariaLabel}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 8, right: 4, bottom: 0, left: 4 }}>
-          <XAxis
-            dataKey="label"
-            tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
-            axisLine={false}
-            tickLine={false}
-            interval={0}
-          />
-          <YAxis
-            tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
-            axisLine={false}
-            tickLine={false}
-            width={46}
-            tickFormatter={(value: number) =>
-              value >= 1000 ? `${Math.round(value / 1000)}k` : String(value)
-            }
-          />
-          <Tooltip
-            cursor={{ fill: "var(--muted)", opacity: 0.4 }}
-            formatter={(value: number | string) => (formatValue ? formatValue(Number(value)) : String(value))}
-          />
-          <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={48}>
-            {data.map((datum) => (
-              <Cell key={datum.label} fill={datum.color} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="space-y-2.5" role="img" aria-label={ariaLabel}>
+      {data.map((datum) => {
+        const width = Math.max(Math.round((datum.value / max) * 100), datum.value > 0 ? 3 : 0);
+        return (
+          <div key={datum.label} className="flex items-center gap-2">
+            <span className="w-[4.5rem] shrink-0 truncate text-xs text-muted-foreground">{datum.label}</span>
+            <span className="h-5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
+              <span
+                className="block h-full rounded-full"
+                style={{ width: `${width}%`, backgroundColor: datum.color }}
+              />
+            </span>
+            <span className="w-20 shrink-0 text-right text-xs font-semibold text-foreground">
+              {format(datum.value)}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
