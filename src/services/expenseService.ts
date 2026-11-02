@@ -55,6 +55,12 @@ export const expenseService = {
       .sort((a, b) => b.expenseDate.localeCompare(a.expenseDate));
   },
 
+  /** All recorded expenses across every event, newest first. */
+  async listAll(): Promise<Expense[]> {
+    await delay(120);
+    return readExpenses().sort((a, b) => b.expenseDate.localeCompare(a.expenseDate));
+  },
+
   async totalForEvent(eventId: string): Promise<number> {
     await delay(60);
     return expenseTotal(readExpenses().filter((e) => e.eventId === eventId));
