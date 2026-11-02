@@ -41,7 +41,7 @@ function ReportDetailPage() {
   const allowed = !!meta && (fullAccess || (report === "contributions" && can(PERMISSIONS.CONTRIBUTION_VIEW)));
 
   return (
-    <ProtectedPage title={allowed ? meta.title : "Report"} subtitle={allowed ? meta.subtitle : undefined} showBack>
+    <ProtectedPage title={allowed ? meta.title : "Report"} subtitle={allowed ? meta.subtitle : ""} showBack>
       {!meta ? (
         <EmptyState title="Report not found" description="The report you opened does not exist." />
       ) : !allowed ? (
